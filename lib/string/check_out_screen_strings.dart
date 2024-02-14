@@ -6,7 +6,7 @@ class CheckOutScreenStrings {
   static String margheritaPrice = "Rs.1250";
   static String sizeString = "Size";
   static String quantityString = "Quantity";
-  static String rating = "4.9";
-  static String calories = "145 cal";
-  static String timing = "30 min";
+  static String rating = " 4.9";
+  static String calories = " 145 cal";
+  static String timing = " 30 min";
 }

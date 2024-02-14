@@ -38,7 +38,7 @@ class _CustomContainerSizesButtonState
               borderRadius: BorderRadius.circular(10), color: color),
           child: IconButton(
             onPressed: () {
-              FocusScope.of(context).requestFocus(widget.focusNode);
+              FocusScope.of(context).requestFocus(_focusNode);
               widget.onPressIconEvent;
             },
             icon: widget.icon ?? const Icon(Icons.question_mark),

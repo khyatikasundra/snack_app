@@ -69,7 +69,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                               CustomContainerSizesButton(
                                 icon: SvgPicture.asset(
                                     AssetNameString.sLetterIcon),
-                                onPressIconEvent: onTapIconButtonSizeEvent,focusNode: _focusNode,
+                                // onPressIconEvent: onTapIconButtonSizeEvent,focusNode: _focusNode,
                               ),
                               CustomContainerSizesButton(
                                   icon: SvgPicture.asset(
