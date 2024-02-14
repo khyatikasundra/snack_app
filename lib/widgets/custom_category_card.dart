@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:snacks_ordering_app/string/assets_string.dart';
+import 'package:snacks_ordering_app/string/menu_screen_strings.dart';
 
 class CustomCategoryCard extends StatefulWidget {
-  final String categoryCardImage;
-  final String categoryCardText;
+  final String? categoryCardImage;
+  final String? categoryCardText;
   const CustomCategoryCard(
       {required this.categoryCardImage,
       required this.categoryCardText,
@@ -16,7 +18,8 @@ class CustomCategoryCard extends StatefulWidget {
 class _CustomCategoryCardState extends State<CustomCategoryCard> {
   final FocusNode _focusNode = FocusNode();
   Color? _surfaceTintColor = Colors.white;
-  String _assetName = "assets/icons/right_arrow_yellow_icon.svg";
+  String _assetName = AssetNameString.rightArrowYellowIconAssetName;
+  bool _isClickContainer = false;
 
   @override
   void initState() {
@@ -34,30 +37,31 @@ class _CustomCategoryCardState extends State<CustomCategoryCard> {
     _surfaceTintColor =
         _focusNode.hasFocus ? const Color(0xFfFECE00) : Colors.white;
     _assetName = _focusNode.hasFocus
-        ? "assets/icons/right_arrow_white_icon.svg"
-        : "assets/icons/right_arrow_yellow_icon.svg";
+        ? AssetNameString.rightArrowWhiteIconAssetName
+        : AssetNameString.rightArrowYellowIconAssetName;
+    _isClickContainer = !_isClickContainer;
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 5),
+      padding: const EdgeInsets.only(right: 5, left: 5),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(200),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.white.withOpacity(0.2),
-                spreadRadius: 5,
-                blurRadius: 50,
-                offset: const Offset(0, 3))
-          ],
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: _isClickContainer
+              ? [
+                  BoxShadow(
+                    color: Colors.white.withOpacity(0.3),
+                    spreadRadius: 1,
+                    blurRadius: 10,
+                  )
+                ]
+              : null,
         ),
         child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).requestFocus(_focusNode);
-          },
+          onTap: () => FocusScope.of(context).requestFocus(_focusNode),
           child: Card(
             color: _surfaceTintColor,
             shape:
@@ -67,13 +71,15 @@ class _CustomCategoryCardState extends State<CustomCategoryCard> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SvgPicture.asset(widget.categoryCardImage),
+                  SvgPicture.asset(widget.categoryCardImage ??
+                      AssetNameString.pizzaSvgImageAssertName),
                   Text(
-                    widget.categoryCardText,
+                    widget.categoryCardText ?? MenuScreenStrings.pizza,
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () =>
+                        FocusScope.of(context).requestFocus(_focusNode),
                     icon: SvgPicture.asset(_assetName),
                   )
                 ],

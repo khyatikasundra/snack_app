@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:snacks_ordering_app/string/assets_string.dart';
+import 'package:snacks_ordering_app/string/menu_screen_strings.dart';
 
 class CustomAppBar extends StatelessWidget {
   final Widget? title;
@@ -9,6 +11,8 @@ class CustomAppBar extends StatelessWidget {
   final String? locationDataText;
   final bool? trailingEnable;
   final bool? middleTitleLocationTextEnable;
+  final Color? trailingIconBackgroundColor;
+  final void Function()? onPressedLeadingIcon;
 
   const CustomAppBar(
       {this.leadingAssetName,
@@ -18,6 +22,8 @@ class CustomAppBar extends StatelessWidget {
       this.locationDataText,
       this.trailingEnable,
       this.middleTitleLocationTextEnable,
+      this.trailingIconBackgroundColor,
+      this.onPressedLeadingIcon,
       super.key});
 
   @override
@@ -35,27 +41,28 @@ class CustomAppBar extends StatelessWidget {
 //?WIDGET METHODS
 
   Widget _leading() => IconButton(
-      onPressed: () {}, icon: SvgPicture.asset(leadingAssetName ?? ""));
+      onPressed: onPressedLeadingIcon, icon: SvgPicture.asset(leadingAssetName ?? ""));
 
-  Widget _middleTitleLocation(bool? middleTitleLocationTextEnable) => Visibility(
+  Widget _middleTitleLocation(bool? middleTitleLocationTextEnable) =>
+      Visibility(
         visible: middleTitleLocationTextEnable ?? false,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(
-              "assets/icons/icon_location.svg",
+              AssetNameString.locationIconAssetName,
             ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
-                locationDataText ?? "PVR,Jabalpur",
+                locationDataText ?? MenuScreenStrings.pvrJabalpur,
                 style: const TextStyle(
                     fontSize: 14,
                     color: Colors.white,
                     fontWeight: FontWeight.bold),
               ),
             ),
-            SvgPicture.asset("assets/icons/icon_down_arrow.svg"),
+            SvgPicture.asset(AssetNameString.downArrowIconAssetName),
           ],
         ),
       );
@@ -66,7 +73,7 @@ class CustomAppBar extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15), color: Colors.white),
+                borderRadius: BorderRadius.circular(15), color: trailingIconBackgroundColor ?? Colors.white),
             child: IconButton(
               onPressed: () {},
               icon: trailingIcon ?? const Icon(Icons.question_mark),
