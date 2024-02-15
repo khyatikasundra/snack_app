@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:snacks_ordering_app/string/assets_string.dart';
@@ -19,6 +18,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   final FocusNode _focusNodeForSmallSize = FocusNode();
   final FocusNode _focusNodeForMediumSize = FocusNode();
   final FocusNode _focusNodeForLargeSize = FocusNode();
+  bool _isLiking = false;
 
   double? imageSizeWidth = 253;
   Color? containerBackgroundColorSmallSize = Colors.white;
@@ -107,14 +107,23 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     setState(() {});
   }
 
+  void likeButtonAction() {
+    _isLiking = !_isLiking;
+    setState(() {});
+  }
+
   //? WIDGET METHOD
   Widget _customAppBar() => CustomAppBar(
         leadingAssetName: AssetNameString.leftArrowIconAssertName,
         onPressedLeadingIcon: () => Navigator.pop(context),
         trailingEnable: true,
         trailingIconBackgroundColor: const Color(0xFFFECE00),
-        trailingIcon: SvgPicture.asset(AssetNameString.heartIconAssertName),
+        trailingIcon: _isLiking
+            ? const Icon(Icons.favorite)
+            : const Icon(Icons.favorite_border),
+        trailingOnPressEvent: likeButtonAction,
       );
+
   Widget _customCounterContainer(
           String assetName, VoidCallback onPressed) =>
       Container(
@@ -205,10 +214,12 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
             AssetNameString.dashSignIcon,
             onTapDecrementCounter,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Text(CheckOutScreenStrings.count(_count),
-                style: const TextStyle(color: Colors.white)),
+          SizedBox(
+            width: 35,
+            child: Center(
+              child: Text(CheckOutScreenStrings.count(_count),
+                  style: const TextStyle(color: Colors.white)),
+            ),
           ),
           _customCounterContainer(
             AssetNameString.plusSignIcon,

@@ -12,6 +12,8 @@ class CustomAppBar extends StatelessWidget {
   final bool? trailingEnable;
   final bool? middleTitleLocationTextEnable;
   final Color? trailingIconBackgroundColor;
+  final FocusNode? focusNode;
+  final VoidCallback? trailingOnPressEvent;
   final void Function()? onPressedLeadingIcon;
 
   const CustomAppBar(
@@ -24,6 +26,8 @@ class CustomAppBar extends StatelessWidget {
       this.middleTitleLocationTextEnable,
       this.trailingIconBackgroundColor,
       this.onPressedLeadingIcon,
+      this.focusNode,
+      this.trailingOnPressEvent,
       super.key});
 
   @override
@@ -39,7 +43,6 @@ class CustomAppBar extends StatelessWidget {
   }
 
 //?WIDGET METHODS
-
   Widget _leading() => IconButton(
       onPressed: onPressedLeadingIcon, icon: SvgPicture.asset(leadingAssetName ?? ""));
 
@@ -75,7 +78,7 @@ class CustomAppBar extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15), color: trailingIconBackgroundColor ?? Colors.white),
             child: IconButton(
-              onPressed: () {},
+              onPressed: trailingOnPressEvent,
               icon: trailingIcon ?? const Icon(Icons.question_mark),
             )),
       );

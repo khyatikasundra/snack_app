@@ -8,7 +8,7 @@ class CustomContainerSizesButton extends StatelessWidget {
   const CustomContainerSizesButton(
       {this.icon,
       this.onPressIconEvent,
-      this.color = Colors.white,
+      this.color= Colors.white,
       this.focusNode,
       super.key});
 

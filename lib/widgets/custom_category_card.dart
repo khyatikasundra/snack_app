@@ -57,6 +57,8 @@ class _CustomCategoryCardState extends State<CustomCategoryCard> {
     setState(() {});
   }
 
+  void iconOnPressFunction() => FocusScope.of(context).requestFocus(_focusNode);
+
   //?WIDGET METHOD
   Widget _cardContainer() => GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(_focusNode),
@@ -76,8 +78,7 @@ class _CustomCategoryCardState extends State<CustomCategoryCard> {
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
                 IconButton(
-                  onPressed: () =>
-                      FocusScope.of(context).requestFocus(_focusNode),
+                  onPressed: iconOnPressFunction,
                   icon: SvgPicture.asset(_assetName),
                 )
               ],
