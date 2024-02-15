@@ -22,6 +22,20 @@ class _CustomCategoryCardState extends State<CustomCategoryCard> {
   bool _isClickContainer = false;
 
   @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 5, left: 5),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: _isClickContainer ? boxShadow() : null,
+        ),
+        child: _cardContainer(),
+      ),
+    );
+  }
+
+  @override
   void initState() {
     super.initState();
     _focusNode.addListener(onTap);
@@ -43,51 +57,40 @@ class _CustomCategoryCardState extends State<CustomCategoryCard> {
     setState(() {});
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 5, left: 5),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          boxShadow: _isClickContainer
-              ? [
-                  BoxShadow(
-                    color: Colors.white.withOpacity(0.3),
-                    spreadRadius: 1,
-                    blurRadius: 10,
-                  )
-                ]
-              : null,
-        ),
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(_focusNode),
-          child: Card(
-            color: _surfaceTintColor,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-            child: SizedBox(
-              width: 110,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(widget.categoryCardImage ??
-                      AssetNameString.pizzaSvgImageAssertName),
-                  Text(
-                    widget.categoryCardText ?? MenuScreenStrings.pizza,
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  IconButton(
-                    onPressed: () =>
-                        FocusScope.of(context).requestFocus(_focusNode),
-                    icon: SvgPicture.asset(_assetName),
-                  )
-                ],
-              ),
+  //?WIDGET METHOD
+  Widget _cardContainer() => GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(_focusNode),
+        child: Card(
+          color: _surfaceTintColor,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          child: SizedBox(
+            width: 110,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(widget.categoryCardImage ??
+                    AssetNameString.pizzaSvgImageAssertName),
+                Text(
+                  widget.categoryCardText ?? MenuScreenStrings.pizza,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                IconButton(
+                  onPressed: () =>
+                      FocusScope.of(context).requestFocus(_focusNode),
+                  icon: SvgPicture.asset(_assetName),
+                )
+              ],
             ),
           ),
         ),
-      ),
-    );
-  }
+      );
+
+  List<BoxShadow>? boxShadow() => [
+        BoxShadow(
+          color: Colors.white.withOpacity(0.3),
+          spreadRadius: 1,
+          blurRadius: 10,
+        )
+      ];
 }

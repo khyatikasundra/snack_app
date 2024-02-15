@@ -24,7 +24,7 @@ class ImageBottomShadow extends StatelessWidget {
         child,
         Positioned.fill(
           top: 105,
-          bottom: 6, // Adjust as needed
+          bottom: 6,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: ClipOval(

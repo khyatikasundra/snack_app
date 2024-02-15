@@ -1,31 +1,16 @@
 import 'package:flutter/material.dart';
 
-class CustomContainerSizesButton extends StatefulWidget {
+class CustomContainerSizesButton extends StatelessWidget {
   final Widget? icon;
   final VoidCallback? onPressIconEvent;
   final FocusNode? focusNode;
+  final Color? color;
   const CustomContainerSizesButton(
-      {this.icon, this.onPressIconEvent, this.focusNode, super.key});
-
-  @override
-  State<CustomContainerSizesButton> createState() =>
-      _CustomContainerSizesButtonState();
-}
-
-class _CustomContainerSizesButtonState
-    extends State<CustomContainerSizesButton> {
-  final FocusNode _focusNode = FocusNode();
-  Color? color = Colors.white;
-  @override
-  void initState() {
-    _focusNode.addListener(onPress);
-    super.initState();
-  }
-
-  void onPress() {
-    color = _focusNode.hasFocus ? const Color(0xFFFECE00) : Colors.white;
-    setState(() {});
-  }
+      {this.icon,
+      this.onPressIconEvent,
+      this.color = Colors.white,
+      this.focusNode,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +23,10 @@ class _CustomContainerSizesButtonState
               borderRadius: BorderRadius.circular(10), color: color),
           child: IconButton(
             onPressed: () {
-              FocusScope.of(context).requestFocus(_focusNode);
-              widget.onPressIconEvent;
+              FocusScope.of(context).requestFocus(focusNode);
+              onPressIconEvent;
             },
-            icon: widget.icon ?? const Icon(Icons.question_mark),
+            icon: icon ?? const Icon(Icons.question_mark),
           )),
     );
   }

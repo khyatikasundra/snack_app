@@ -17,53 +17,6 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  List<PopularNowSectionDataClass> popularNowItem = [
-    PopularNowSectionDataClass(
-        imageAssetName: AssetNameString.pizzaImageAssetName,
-        itemNameText: MenuScreenStrings.margheritaPizza,
-        itemSpecialtyText: MenuScreenStrings.cheesyPizza),
-    PopularNowSectionDataClass(
-        imageAssetName: AssetNameString.hamburgerImageAssetName,
-        itemNameText: MenuScreenStrings.hamburger,
-        itemSpecialtyText: MenuScreenStrings.doublePatty),
-    PopularNowSectionDataClass(
-        imageAssetName: AssetNameString.hamburgerImageAssetName,
-        itemNameText: MenuScreenStrings.hamburger,
-        itemSpecialtyText: MenuScreenStrings.doublePatty),
-    PopularNowSectionDataClass(
-        imageAssetName: AssetNameString.pizzaImageAssetName,
-        itemNameText: MenuScreenStrings.margheritaPizza,
-        itemSpecialtyText: MenuScreenStrings.cheesyPizza),
-    PopularNowSectionDataClass(
-        imageAssetName: AssetNameString.pizzaImageAssetName,
-        itemNameText: MenuScreenStrings.margheritaPizza,
-        itemSpecialtyText: MenuScreenStrings.cheesyPizza),
-    PopularNowSectionDataClass(
-        imageAssetName: AssetNameString.hamburgerImageAssetName,
-        itemNameText: MenuScreenStrings.hamburger,
-        itemSpecialtyText: MenuScreenStrings.doublePatty),
-  ];
-
-  List<CategorySectionDataClass> categoryItem = [
-    CategorySectionDataClass(
-        imageAssetName: AssetNameString.pizzaSvgImageAssertName,
-        itemNameText: MenuScreenStrings.pizza),
-    CategorySectionDataClass(
-        imageAssetName: AssetNameString.burgerSvgImageAssertName,
-        itemNameText: MenuScreenStrings.burger),
-    CategorySectionDataClass(
-        imageAssetName: AssetNameString.popcornSvgImageAssertName,
-        itemNameText: MenuScreenStrings.popcorn),
-    CategorySectionDataClass(
-        imageAssetName: AssetNameString.pizzaSvgImageAssertName,
-        itemNameText: MenuScreenStrings.pizza),
-    CategorySectionDataClass(
-        imageAssetName: AssetNameString.burgerSvgImageAssertName,
-        itemNameText: MenuScreenStrings.burger),
-    CategorySectionDataClass(
-        imageAssetName: AssetNameString.popcornSvgImageAssertName,
-        itemNameText: MenuScreenStrings.popcorn),
-  ];
   bool _switchValue = false;
   bool _isGridViewVisible = true;
   bool _isListViewVisible = false;
@@ -100,6 +53,54 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 
+  //?LIST
+  List<CategorySectionDataClass> categoryItem = [
+    CategorySectionDataClass(
+        imageAssetName: AssetNameString.pizzaSvgImageAssertName,
+        itemNameText: MenuScreenStrings.pizza),
+    CategorySectionDataClass(
+        imageAssetName: AssetNameString.burgerSvgImageAssertName,
+        itemNameText: MenuScreenStrings.burger),
+    CategorySectionDataClass(
+        imageAssetName: AssetNameString.popcornSvgImageAssertName,
+        itemNameText: MenuScreenStrings.popcorn),
+    CategorySectionDataClass(
+        imageAssetName: AssetNameString.pizzaSvgImageAssertName,
+        itemNameText: MenuScreenStrings.pizza),
+    CategorySectionDataClass(
+        imageAssetName: AssetNameString.burgerSvgImageAssertName,
+        itemNameText: MenuScreenStrings.burger),
+    CategorySectionDataClass(
+        imageAssetName: AssetNameString.popcornSvgImageAssertName,
+        itemNameText: MenuScreenStrings.popcorn),
+  ];
+
+  List<PopularNowSectionDataClass> popularNowItem = [
+    PopularNowSectionDataClass(
+        imageAssetName: AssetNameString.pizzaImageAssetName,
+        itemNameText: MenuScreenStrings.margheritaPizza,
+        itemSpecialtyText: MenuScreenStrings.cheesyPizza),
+    PopularNowSectionDataClass(
+        imageAssetName: AssetNameString.hamburgerImageAssetName,
+        itemNameText: MenuScreenStrings.hamburger,
+        itemSpecialtyText: MenuScreenStrings.doublePatty),
+    PopularNowSectionDataClass(
+        imageAssetName: AssetNameString.hamburgerImageAssetName,
+        itemNameText: MenuScreenStrings.hamburger,
+        itemSpecialtyText: MenuScreenStrings.doublePatty),
+    PopularNowSectionDataClass(
+        imageAssetName: AssetNameString.pizzaImageAssetName,
+        itemNameText: MenuScreenStrings.margheritaPizza,
+        itemSpecialtyText: MenuScreenStrings.cheesyPizza),
+    PopularNowSectionDataClass(
+        imageAssetName: AssetNameString.pizzaImageAssetName,
+        itemNameText: MenuScreenStrings.margheritaPizza,
+        itemSpecialtyText: MenuScreenStrings.cheesyPizza),
+    PopularNowSectionDataClass(
+        imageAssetName: AssetNameString.hamburgerImageAssetName,
+        itemNameText: MenuScreenStrings.hamburger,
+        itemSpecialtyText: MenuScreenStrings.doublePatty),
+  ];
 //?WIDGET METHODS
   PreferredSize _appBar() => PreferredSize(
         preferredSize: const Size(double.infinity, kToolbarHeight),

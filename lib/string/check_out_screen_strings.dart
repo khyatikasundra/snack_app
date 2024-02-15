@@ -9,4 +9,8 @@ class CheckOutScreenStrings {
   static String rating = " 4.9";
   static String calories = " 145 cal";
   static String timing = " 30 min";
+  static String addToCart = "Add to cart";
+  static String yourItemAddedToCart(int count) =>
+      "Your selected $count item is added in the cart";
+  static String count(int count) => "$count";
 }
