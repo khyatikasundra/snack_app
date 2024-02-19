@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:snacks_ordering_app/data_class/category_section_data_class.dart';
 import 'package:snacks_ordering_app/data_class/popular_now_section_data_class.dart';
@@ -171,10 +172,9 @@ class _MenuScreenState extends State<MenuScreen> {
 
   Widget _customSwitch() => Padding(
         padding: const EdgeInsets.only(right: 15),
-        child: Switch(
-          materialTapTargetSize: MaterialTapTargetSize.padded,
-          thumbIcon: MaterialStateProperty.all(const Icon(Icons.star)),
+        child: CupertinoSwitch(
           activeColor: const Color(0xFfFECE00),
+          trackColor: Colors.grey,
           value: _switchValue,
           onChanged: (value) => _onChangeSwitchFunction(value),
         ),
@@ -227,14 +227,8 @@ class _MenuScreenState extends State<MenuScreen> {
 
   CustomPopularNowCard _customPopularNowCardForList(int index) =>
       CustomPopularNowCard(
-        cardHeight: 120,
-        cardWidth:
-            MediaQuery.of(context).size.width > 400 ? 400 : double.infinity,
-        alignment: Alignment.centerLeft,
-        cardImagePositionedLeft: -10,
-        cardHeadlineTopPadding: 0,
-        cardHeadlineLeftPadding: 40,
-        cardTopPadding: 0,
+        isGridView: false,
+        // cardImagePositionedLeft: -10,
         imageAssetName: popularNowItem[index].imageAssetName,
         itemNameText: popularNowItem[index].itemNameText,
         itemSpecialtyText: popularNowItem[index].itemSpecialtyText,

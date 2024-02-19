@@ -124,7 +124,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         trailingOnPressEvent: likeButtonAction,
       );
 
-  Widget _customCounterContainer(
+  Widget  _customCounterContainer(
           String assetName, VoidCallback onPressed) =>
       Container(
           width: 32,
