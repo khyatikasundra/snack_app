@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:snacks_ordering_app/data_class/size_model.dart';
+import 'package:snacks_ordering_app/widgets/svg_image.dart';
 
 class CustomContainerSizesButton extends StatelessWidget {
-  final Widget? icon;
-  final VoidCallback? onPressIconEvent;
-  final FocusNode? focusNode;
+  final VoidCallback? onIconClick;
   final Color? color;
+  final int index;
   const CustomContainerSizesButton(
-      {this.icon,
-      this.onPressIconEvent,
-      this.color= Colors.white,
-      this.focusNode,
+      {this.onIconClick,
+      this.color = Colors.white,
+      this.index = 0,
       super.key});
 
   @override
@@ -22,11 +22,8 @@ class CustomContainerSizesButton extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10), color: color),
           child: IconButton(
-            onPressed: () {
-              FocusScope.of(context).requestFocus(focusNode);
-              onPressIconEvent;
-            },
-            icon: icon ?? const Icon(Icons.question_mark),
+            onPressed: onIconClick,
+            icon: SvgImage(sizesList[index].assertName),
           )),
     );
   }

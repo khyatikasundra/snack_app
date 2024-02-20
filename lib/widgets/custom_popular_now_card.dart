@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:snacks_ordering_app/data_class/popular_now_section_model.dart';
 import 'package:snacks_ordering_app/screen/check_out_screen.dart';
 import 'package:snacks_ordering_app/string/assets_string.dart';
-import 'package:snacks_ordering_app/string/menu_screen_strings.dart';
+import 'package:snacks_ordering_app/string/string_names.dart';
 import 'package:snacks_ordering_app/widgets/image_bottom_shadow.dart';
+import 'package:snacks_ordering_app/widgets/svg_image.dart';
 
 class CustomPopularNowCard extends StatelessWidget {
-  // final double? cardImagePositionedTop;
-  final double? cardImagePositionedLeft;
-  final String? imageAssetName;
-  final String? itemNameText;
-  final String? itemSpecialtyText;
   final bool isGridView;
+  final int index;
+  final List<PopularNowSectionModel> list;
 
-  const CustomPopularNowCard(
-      {this.cardImagePositionedLeft,
-      // this.cardImagePositionedTop = -6,
-      this.imageAssetName,
-      this.itemNameText,
-      this.itemSpecialtyText,
-      this.isGridView = true,
-      super.key});
+  const CustomPopularNowCard({
+    required this.list,
+    required this.index,
+    this.isGridView = true,
+    super.key,
+  });
 
   void onTap(BuildContext context) => Navigator.push(
       context, MaterialPageRoute(builder: (context) => const CheckOutScreen()));
@@ -48,17 +44,19 @@ class CustomPopularNowCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        itemNameText ?? MenuScreenStrings.margheritaPizza,
+                        list[index].itemNameText ??
+                            StringNames.kMargheritaPizza,
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            itemSpecialtyText ?? MenuScreenStrings.cheesyPizza,
+                            list[index].itemSpecialtyText ??
+                                StringNames.cheesyPizza,
                             style: Theme.of(context).textTheme.headlineSmall,
                           ),
-                          SvgPicture.asset(AssetNameString.fireIconAssetName)
+                          SvgImage(AssetNameString.fireIconAssetName)
                         ],
                       )
                     ],
@@ -69,13 +67,14 @@ class CustomPopularNowCard extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: isGridView ? -6:0,
-          left: isGridView ? null:0,
+          top: isGridView ? -6 : 0,
+          left: isGridView ? null : 0,
           child: ImageBottomShadow(
             child: InkWell(
               onTap: () => onTap(context),
               child: Image.asset(
-                imageAssetName ?? AssetNameString.pizzaImageAssetName,
+                list[index].imageAssetName ??
+                    AssetNameString.pizzaImageAssetName,
                 width: 130,
               ),
             ),

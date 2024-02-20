@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:snacks_ordering_app/data_class/size_model.dart';
 import 'package:snacks_ordering_app/string/assets_string.dart';
-import 'package:snacks_ordering_app/string/check_out_screen_strings.dart';
+import 'package:snacks_ordering_app/string/string_names.dart';
 import 'package:snacks_ordering_app/widgets/background_container.dart';
-import 'package:snacks_ordering_app/widgets/custom_app_bar.dart';
+import 'package:snacks_ordering_app/widgets/check_out_screen_app_bar.dart';
 import 'package:snacks_ordering_app/widgets/custom_container_sizes_button.dart';
 import 'package:snacks_ordering_app/widgets/custom_scaffold.dart';
 import 'package:snacks_ordering_app/widgets/custom_scroll_widget.dart';
+import 'package:snacks_ordering_app/widgets/svg_image.dart';
 
 class CheckOutScreen extends StatefulWidget {
   const CheckOutScreen({super.key});
@@ -15,22 +16,13 @@ class CheckOutScreen extends StatefulWidget {
 }
 
 class _CheckOutScreenState extends State<CheckOutScreen> {
-  final FocusNode _focusNodeForSmallSize = FocusNode();
-  final FocusNode _focusNodeForMediumSize = FocusNode();
-  final FocusNode _focusNodeForLargeSize = FocusNode();
-  bool _isLiking = false;
-
-  double? imageSizeWidth = 253;
-  Color? containerBackgroundColorSmallSize = Colors.white;
-  Color? containerBackgroundColorMediumSize = Colors.white;
-  Color? containerBackgroundColorLargeSize = Colors.white;
-  Color? counterBackgroundColor = Colors.white;
+  int _isSizeSelected = -1;
   int _count = 1;
 
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: _customAppBar(),
+      appBar: const CheckOutScreenAppBar(),
       body: BackgroundContainer(
         child: SafeArea(
           child: CustomScrollWidget(
@@ -39,15 +31,10 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: 400,
-                    child: Stack(children: [
-                      _richTextTitle(),
-                      _itemImage(),
-                      _sizeQuantityRatingSection()
-                    ]),
-                  ),
-                  _detailContentRichText(),
+                  _titleBlock(),
+                  _ratingBar(),
+                  _detailTitleText(),
+                  _detailDescriptionText(),
                   _addToCardButton()
                 ],
               ),
@@ -59,151 +46,99 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   }
 
   //?FUNCTIONS
-  @override
-  void initState() {
-    _focusNodeForSmallSize.addListener(onTapIconButtonSizeEvent);
-    _focusNodeForMediumSize.addListener(onTapIconButtonSizeEvent);
-    _focusNodeForLargeSize.addListener(onTapIconButtonSizeEvent);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _focusNodeForSmallSize.dispose();
-    _focusNodeForLargeSize.dispose();
-    _focusNodeForMediumSize.dispose();
-    super.dispose();
-  }
-
-  void onTapIconButtonSizeEvent() {
-    if (_focusNodeForSmallSize.hasFocus) {
-      imageSizeWidth = 150;
-      containerBackgroundColorSmallSize = Colors.yellow;
-      containerBackgroundColorMediumSize = Colors.white;
-      containerBackgroundColorLargeSize = Colors.white;
-    } else if (_focusNodeForMediumSize.hasFocus) {
-      imageSizeWidth = 200;
-      containerBackgroundColorSmallSize = Colors.white;
-      containerBackgroundColorMediumSize = Colors.yellow;
-      containerBackgroundColorLargeSize = Colors.white;
-    } else if (_focusNodeForLargeSize.hasFocus) {
-      imageSizeWidth = 253;
-      containerBackgroundColorSmallSize = Colors.white;
-      containerBackgroundColorMediumSize = Colors.white;
-      containerBackgroundColorLargeSize = Colors.yellow;
-    }
-    setState(() {});
-  }
 
   void onTapIncrementCounter() {
     _count++;
-
     setState(() {});
   }
 
   void onTapDecrementCounter() {
-    _count = _count > 0 ? _count - 1 : 0;
-
-    setState(() {});
-  }
-
-  void likeButtonAction() {
-    _isLiking = !_isLiking;
+    _count = _count > 1 ? _count - 1 : 1;
     setState(() {});
   }
 
   //? WIDGET METHOD
-  Widget _customAppBar() => CustomAppBar(
-        leadingAssetName: AssetNameString.leftArrowIconAssertName,
-        onPressedLeadingIcon: () => Navigator.pop(context),
-        trailingEnable: true,
-        trailingIconBackgroundColor: const Color(0xFFFECE00),
-        trailingIcon: _isLiking
-            ? const Icon(Icons.favorite)
-            : const Icon(Icons.favorite_border),
-        trailingOnPressEvent: likeButtonAction,
+
+  Widget _titleBlock() => SizedBox(
+        height: 360,
+        child: Stack(
+            children: [_richTextTitle(), _itemImage(), _sizeQuantitySection()]),
       );
 
-  Widget  _customCounterContainer(
-          String assetName, VoidCallback onPressed) =>
+  Widget _customCounterContainer(String assetName, VoidCallback onPressed) =>
       Container(
           width: 32,
           height: 32,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: counterBackgroundColor),
-          child: IconButton(
-              icon: SvgPicture.asset(assetName), onPressed: onPressed));
+              borderRadius: BorderRadius.circular(10), color: Colors.white),
+          child: IconButton(icon: SvgImage(assetName), onPressed: onPressed));
 
   Widget _richTextTitle() => Align(
         alignment: Alignment.topLeft,
         child: RichText(
             text: TextSpan(children: [
           TextSpan(
-              text: CheckOutScreenStrings.margheritaPizza,
+              text: StringNames.kMargheritaPizza,
               style: Theme.of(context).textTheme.displayLarge),
           TextSpan(
-              text: CheckOutScreenStrings.margheritaPrice,
+              text: StringNames.margheritaPrice,
               style: Theme.of(context).textTheme.displayMedium)
         ])),
       );
 
   Widget _itemImage() => Align(
-        alignment: Alignment.centerRight,
+        alignment: Alignment.bottomRight,
         child: Image.asset(
           AssetNameString.pizzaImageBigSizeAssertName,
-          width: imageSizeWidth,
         ),
       );
-  Widget _sizeQuantityRatingSection() => Align(
+  Widget _sizeQuantitySection() => Align(
         alignment: Alignment.bottomLeft,
         child: Padding(
-          padding: const EdgeInsets.only(top: 80),
+          padding: const EdgeInsets.only(top: 115),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _sizeText(),
-              _customContainerSmallSizeButton(),
-              _customContainerMediumSizeButton(),
-              _customContainerLargeSizeButton(),
+              _sizeButtonListView(),
               _qualityText(),
               _counterButtonRow(),
-              _ratingBar()
             ],
           ),
         ),
       );
   Widget _sizeText() => Text(
-        CheckOutScreenStrings.sizeString,
+        StringNames.sizeString,
         style: Theme.of(context).textTheme.headlineSmall,
       );
 
-  Widget _customContainerSmallSizeButton() => CustomContainerSizesButton(
-        icon: SvgPicture.asset(AssetNameString.sLetterIcon),
-        onPressIconEvent: onTapIconButtonSizeEvent,
-        focusNode: _focusNodeForSmallSize,
-        color: containerBackgroundColorSmallSize,
-      );
-
-  Widget _customContainerMediumSizeButton() => CustomContainerSizesButton(
-        icon: SvgPicture.asset(AssetNameString.mLetterIcon),
-        onPressIconEvent: onTapIconButtonSizeEvent,
-        focusNode: _focusNodeForMediumSize,
-        color: containerBackgroundColorMediumSize,
-      );
-
-  Widget _customContainerLargeSizeButton() => CustomContainerSizesButton(
-        icon: SvgPicture.asset(AssetNameString.lLetterIcon),
-        onPressIconEvent: onTapIconButtonSizeEvent,
-        focusNode: _focusNodeForLargeSize,
-        color: containerBackgroundColorLargeSize,
+  Widget _sizeButtonListView() => Expanded(
+        child: SizedBox(
+          width: 32,
+          child: ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: sizesList.length,
+              itemBuilder: (context, index) {
+                return CustomContainerSizesButton(
+                  onIconClick: () {
+                    setState(() {
+                      _isSizeSelected = index;
+                    });
+                  },
+                  color: _isSizeSelected == index
+                      ? const Color(0xFfFECE00)
+                      : Colors.white,
+                  index: index,
+                );
+              }),
+        ),
       );
 
   Widget _qualityText() => Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: Text(
-          CheckOutScreenStrings.quantityString,
+          StringNames.quantityString,
           style: Theme.of(context).textTheme.headlineSmall,
         ),
       );
@@ -217,7 +152,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
           SizedBox(
             width: 35,
             child: Center(
-              child: Text(CheckOutScreenStrings.count(_count),
+              child: Text(StringNames.count(_count),
                   style: const TextStyle(color: Colors.white)),
             ),
           ),
@@ -229,33 +164,24 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       );
 
   Widget _ratingBar() => Padding(
-        padding: const EdgeInsets.only(top: 25),
+        padding: const EdgeInsets.symmetric(vertical: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            _reviewDetailRichText(AssetNameString.starIcon, StringNames.rating),
             _reviewDetailRichText(
-                AssetNameString.starIcon, CheckOutScreenStrings.rating),
-            _reviewDetailRichText(AssetNameString.fireIconAssetName,
-                CheckOutScreenStrings.calories),
+                AssetNameString.fireIconAssetName, StringNames.calories),
             _reviewDetailRichText(
-                AssetNameString.timeClockIcon, CheckOutScreenStrings.timing)
+                AssetNameString.timeClockIcon, StringNames.timing)
           ],
         ),
       );
 
-  Widget _detailContentRichText() => RichText(
-          text: TextSpan(children: [
-        TextSpan(
-            text: CheckOutScreenStrings.details,
-            style: Theme.of(context).textTheme.titleMedium),
-        const WidgetSpan(
-            child: SizedBox(
-          height: 12,
-        )),
-        TextSpan(
-            text: CheckOutScreenStrings.detailContent,
-            style: Theme.of(context).textTheme.bodySmall)
-      ]));
+  Widget _detailTitleText() =>
+      Text(StringNames.details, style: Theme.of(context).textTheme.titleMedium);
+
+  Widget _detailDescriptionText() => Text(StringNames.detailContent,
+      style: Theme.of(context).textTheme.bodySmall);
 
   Widget _addToCardButton() => Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
@@ -263,8 +189,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
           child: InkWell(
             onTap: () => ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content:
-                    Text(CheckOutScreenStrings.yourItemAddedToCart(_count)),
+                content: Text(StringNames.yourItemAddedToCart(_count)),
               ),
             ),
             child: _addButtonContainer(),
@@ -280,7 +205,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
             boxShadow: addButtonBoxShadow()),
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: Center(child: Text(CheckOutScreenStrings.addToCart)),
+          child: Center(child: Text(StringNames.addToCart)),
         ),
       );
 
@@ -297,7 +222,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
           text: TextSpan(children: [
         WidgetSpan(
             child: Center(
-          child: SvgPicture.asset(assertName),
+          child: SvgImage(assertName),
         )),
         TextSpan(text: reviewText, style: Theme.of(context).textTheme.bodySmall)
       ]));

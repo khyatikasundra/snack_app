@@ -1,14 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:snacks_ordering_app/data_class/category_section_data_class.dart';
-import 'package:snacks_ordering_app/data_class/popular_now_section_data_class.dart';
-import 'package:snacks_ordering_app/string/assets_string.dart';
-import 'package:snacks_ordering_app/string/menu_screen_strings.dart';
+import 'package:snacks_ordering_app/data_class/category_section_model.dart';
+import 'package:snacks_ordering_app/data_class/popular_now_section_model.dart';
+import 'package:snacks_ordering_app/string/string_names.dart';
 import 'package:snacks_ordering_app/widgets/background_container.dart';
-import 'package:snacks_ordering_app/widgets/custom_app_bar.dart';
 import 'package:snacks_ordering_app/widgets/custom_category_card.dart';
 import 'package:snacks_ordering_app/widgets/custom_popular_now_card.dart';
 import 'package:snacks_ordering_app/widgets/custom_scaffold.dart';
+import 'package:snacks_ordering_app/widgets/menu_screen_app_bar.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -19,13 +18,19 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   bool _switchValue = false;
-  bool _isGridViewVisible = true;
-  bool _isListViewVisible = false;
+  int selectedIndex = -1;
+  late List<PopularNowSectionModel> selectedItem;
+
+  @override
+  void initState() {
+    selectedItem = popularNowItem;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: _appBar(),
+      appBar: const MenuScreenAppBar(),
       body: BackgroundContainer(
         child: SafeArea(
           child: Container(
@@ -44,8 +49,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     ],
                   ),
                 ),
-                _sliverGridView(),
-                _sliverListView()
+                _switchValue ? _sliverListView() : _sliverGridView()
               ],
             ),
           ),
@@ -54,75 +58,20 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 
-  //?LIST
-  List<CategorySectionDataClass> categoryItem = [
-    CategorySectionDataClass(
-        imageAssetName: AssetNameString.pizzaSvgImageAssertName,
-        itemNameText: MenuScreenStrings.pizza),
-    CategorySectionDataClass(
-        imageAssetName: AssetNameString.burgerSvgImageAssertName,
-        itemNameText: MenuScreenStrings.burger),
-    CategorySectionDataClass(
-        imageAssetName: AssetNameString.popcornSvgImageAssertName,
-        itemNameText: MenuScreenStrings.popcorn),
-    CategorySectionDataClass(
-        imageAssetName: AssetNameString.pizzaSvgImageAssertName,
-        itemNameText: MenuScreenStrings.pizza),
-    CategorySectionDataClass(
-        imageAssetName: AssetNameString.burgerSvgImageAssertName,
-        itemNameText: MenuScreenStrings.burger),
-    CategorySectionDataClass(
-        imageAssetName: AssetNameString.popcornSvgImageAssertName,
-        itemNameText: MenuScreenStrings.popcorn),
-  ];
+  //?List
 
-  List<PopularNowSectionDataClass> popularNowItem = [
-    PopularNowSectionDataClass(
-        imageAssetName: AssetNameString.pizzaImageAssetName,
-        itemNameText: MenuScreenStrings.margheritaPizza,
-        itemSpecialtyText: MenuScreenStrings.cheesyPizza),
-    PopularNowSectionDataClass(
-        imageAssetName: AssetNameString.hamburgerImageAssetName,
-        itemNameText: MenuScreenStrings.hamburger,
-        itemSpecialtyText: MenuScreenStrings.doublePatty),
-    PopularNowSectionDataClass(
-        imageAssetName: AssetNameString.hamburgerImageAssetName,
-        itemNameText: MenuScreenStrings.hamburger,
-        itemSpecialtyText: MenuScreenStrings.doublePatty),
-    PopularNowSectionDataClass(
-        imageAssetName: AssetNameString.pizzaImageAssetName,
-        itemNameText: MenuScreenStrings.margheritaPizza,
-        itemSpecialtyText: MenuScreenStrings.cheesyPizza),
-    PopularNowSectionDataClass(
-        imageAssetName: AssetNameString.pizzaImageAssetName,
-        itemNameText: MenuScreenStrings.margheritaPizza,
-        itemSpecialtyText: MenuScreenStrings.cheesyPizza),
-    PopularNowSectionDataClass(
-        imageAssetName: AssetNameString.hamburgerImageAssetName,
-        itemNameText: MenuScreenStrings.hamburger,
-        itemSpecialtyText: MenuScreenStrings.doublePatty),
-  ];
 //?WIDGET METHODS
-  PreferredSize _appBar() => PreferredSize(
-        preferredSize: const Size(double.infinity, kToolbarHeight),
-        child: CustomAppBar(
-          leadingAssetName: AssetNameString.optionIconAssetName,
-          trailingEnable: true,
-          trailingIcon: const Icon(Icons.mic_none),
-          middleTitleLocationTextEnable: true,
-        ),
-      );
 
   Widget _richTextTitle() => Container(
         margin: const EdgeInsets.only(top: 26),
         child: RichText(
             text: TextSpan(children: [
           TextSpan(
-            text: MenuScreenStrings.getYourFood,
+            text: StringNames.getYourFood,
             style: Theme.of(context).textTheme.displaySmall,
           ),
           TextSpan(
-            text: MenuScreenStrings.delivered,
+            text: StringNames.delivered,
             style: Theme.of(context).textTheme.displayLarge,
           ),
         ])),
@@ -136,7 +85,7 @@ class _MenuScreenState extends State<MenuScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            MenuScreenStrings.catagories,
+            StringNames.catagories,
             style: Theme.of(context).textTheme.titleMedium,
           ),
           _categoriesListBuilder()
@@ -151,19 +100,39 @@ class _MenuScreenState extends State<MenuScreen> {
             itemBuilder: (BuildContext context, int index) {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
-                child: CustomCategoryCard(
-                  categoryCardImage: categoryItem[index].imageAssetName,
-                  categoryCardText: categoryItem[index].itemNameText,
-                ),
+                child: _customCategoryCard(index),
               );
             }),
+      );
+
+  Widget _customCategoryCard(int index) => CustomCategoryCard(
+        index: index,
+        onCardClick: () {
+          setState(() {
+            selectedIndex = index;
+          });
+          selectedItem = popularNowItem
+              .where((element) =>
+                  categoryItem[index].itemCategorization ==
+                  element.itemCategorization)
+              .toList();
+        },
+        surfaceTint:
+            selectedIndex == index ? const Color(0xFfFECE00) : Colors.white,
+        iconBackgroundColor:
+            selectedIndex == index ? Colors.white : const Color(0xFfFECE00),
+        onIconClick: () {
+          setState(() {
+            selectedIndex = index;
+          });
+        },
       );
 
   Widget _popularNowTitleSection() => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            MenuScreenStrings.popularNow,
+            StringNames.popularNow,
             style: Theme.of(context).textTheme.titleMedium,
           ),
           _customSwitch()
@@ -182,55 +151,26 @@ class _MenuScreenState extends State<MenuScreen> {
 
   void _onChangeSwitchFunction(bool value) {
     _switchValue = value;
-    _isGridViewVisible = !_switchValue;
-    _isListViewVisible = _switchValue;
     setState(() {});
   }
 
-  SliverVisibility _sliverGridView() => SliverVisibility(
-        visible: _isGridViewVisible,
-        sliver: SliverPadding(
-          padding: EdgeInsets.only(
-              right: MediaQuery.of(context).size.width > 400 ? 40 : 20),
-          sliver: SliverGrid.builder(
-              itemCount: popularNowItem.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: MediaQuery.of(context).size.width > 400
-                      ? 1 / 0.5
-                      : 1 / 1.3,
-                  crossAxisCount: 2),
-              itemBuilder: (context, index) =>
-                  _customPopularNowCardForGrid(index)),
+  SliverGrid _sliverGridView() => SliverGrid.builder(
+      itemCount: selectedItem.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          childAspectRatio:
+              MediaQuery.of(context).size.width > 400 ? 1 / 0.5 : 1 / 1.3,
+          crossAxisCount: 2),
+      itemBuilder: (context, index) => CustomPopularNowCard(
+            index: index,
+            list: selectedItem,
+          ));
+
+  SliverList _sliverListView() => SliverList.builder(
+        itemCount: selectedItem.length,
+        itemBuilder: (context, index) => CustomPopularNowCard(
+          index: index,
+          isGridView: false,
+          list: selectedItem,
         ),
-      );
-
-  CustomPopularNowCard _customPopularNowCardForGrid(int index) =>
-      CustomPopularNowCard(
-        imageAssetName: popularNowItem[index].imageAssetName,
-        itemNameText: popularNowItem[index].itemNameText,
-        itemSpecialtyText: popularNowItem[index].itemSpecialtyText,
-      );
-
-  SliverVisibility _sliverListView() => SliverVisibility(
-        visible: _isListViewVisible,
-        sliver: SliverPadding(
-          padding: EdgeInsets.only(
-              right: MediaQuery.of(context).size.width > 400 ? 150 : 15,
-              left: MediaQuery.of(context).size.width > 400 ? 150 : 0),
-          sliver: SliverList.builder(
-            itemCount: popularNowItem.length,
-            itemBuilder: (context, index) =>
-                _customPopularNowCardForList(index),
-          ),
-        ),
-      );
-
-  CustomPopularNowCard _customPopularNowCardForList(int index) =>
-      CustomPopularNowCard(
-        isGridView: false,
-        // cardImagePositionedLeft: -10,
-        imageAssetName: popularNowItem[index].imageAssetName,
-        itemNameText: popularNowItem[index].itemNameText,
-        itemSpecialtyText: popularNowItem[index].itemSpecialtyText,
       );
 }

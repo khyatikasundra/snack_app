@@ -1,8 +1,8 @@
 class AssetNameString {
   static String pizzaImageAssetName = "assets/images/pizza_picture.png";
   static String hamburgerImageAssetName = "assets/images/burger_picture.png";
-  static String rightArrowYellowIconAssetName ="assets/icons/right_arrow_yellow_icon.svg";
-  static String rightArrowWhiteIconAssetName ="assets/icons/right_arrow_white_icon.svg";
+  static String rightArrowIconAssetName ="assets/icons/right_arrow.svg";
+  
   static String fireIconAssetName= "assets/icons/fire_icon.svg";
   static String locationIconAssetName="assets/icons/icon_location.svg";
   static String downArrowIconAssetName="assets/icons/icon_down_arrow.svg";
