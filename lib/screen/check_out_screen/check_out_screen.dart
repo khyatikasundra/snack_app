@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:snacks_ordering_app/data_class/size_model.dart';
+import 'package:snacks_ordering_app/screen/check_out_screen/bloc/check_out_screen_bloc.dart';
 import 'package:snacks_ordering_app/string/assets_string.dart';
 import 'package:snacks_ordering_app/string/string_names.dart';
 import 'package:snacks_ordering_app/widgets/background_container.dart';
@@ -16,8 +18,13 @@ class CheckOutScreen extends StatefulWidget {
 }
 
 class _CheckOutScreenState extends State<CheckOutScreen> {
-  int _isSizeSelected = -1;
   int _count = 1;
+  late CheckOutScreenBloc _checkOutScreenBloc;
+  @override
+  void initState() {
+    _checkOutScreenBloc = context.read<CheckOutScreenBloc>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,22 +123,20 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   Widget _sizeButtonListView() => Expanded(
         child: SizedBox(
           width: 32,
-          child: ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: sizesList.length,
-              itemBuilder: (context, index) {
-                return CustomContainerSizesButton(
-                  onIconClick: () {
-                    setState(() {
-                      _isSizeSelected = index;
-                    });
-                  },
-                  color: _isSizeSelected == index
-                      ? const Color(0xFfFECE00)
-                      : Colors.white,
-                  index: index,
-                );
-              }),
+          child: BlocBuilder<CheckOutScreenBloc, CheckOutScreenState>(
+            builder: (context, state) {
+              return ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: sizesList.length,
+                  itemBuilder: (context, index) {
+                    return CustomIconButtonOfSizes(
+                      onIconClick: () => _checkOutScreenBloc
+                          .add(SizeSelectionEvent(index: index)),
+                      index: index,
+                    );
+                  });
+            },
+          ),
         ),
       );
 
@@ -186,36 +191,31 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   Widget _addToCardButton() => Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Center(
-          child: InkWell(
-            onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(StringNames.yourItemAddedToCart(_count)),
-              ),
-            ),
-            child: _addButtonContainer(),
+          child: ElevatedButton(
+            onPressed: _onAddButtonClickShowSnakeBar,
+            style: _addButtonStyle(),
+            child: Text(StringNames.addToCart),
           ),
         ),
       );
 
-  Widget _addButtonContainer() => Container(
-        width: MediaQuery.of(context).size.width > 400 ? 400 : 300,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: const Color(0xFFFECE00),
-            boxShadow: addButtonBoxShadow()),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Center(child: Text(StringNames.addToCart)),
+  ButtonStyle _addButtonStyle() {
+    return ButtonStyle(
+        padding: MaterialStateProperty.all(
+            const EdgeInsets.symmetric(horizontal: 120, vertical: 15)),
+        elevation: MaterialStateProperty.all(5),
+        shadowColor: MaterialStateProperty.all(const Color(0xFFFECE00)),
+        shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
+        backgroundColor: MaterialStateProperty.all(const Color(0xFFFECE00)));
+  }
+
+  void _onAddButtonClickShowSnakeBar() =>
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(StringNames.yourItemAddedToCart(_count)),
         ),
       );
-
-  List<BoxShadow>? addButtonBoxShadow() => [
-        BoxShadow(
-            blurRadius: 100,
-            color: const Color(0xFFFECE00).withOpacity(0.2),
-            offset: const Offset(0, 30),
-            spreadRadius: 0)
-      ];
 
   Widget _reviewDetailRichText(String assertName, String reviewText) =>
       RichText(

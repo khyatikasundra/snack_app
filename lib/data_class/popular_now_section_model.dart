@@ -18,7 +18,7 @@ class PopularNowSectionModel {
 List<PopularNowSectionModel> popularNowItem = [
   PopularNowSectionModel(
       imageAssetName: AssetNameString.pizzaImageAssetName,
-      itemNameText: StringNames.kMargheritaPizza,
+      itemNameText: StringNames.margheritaPizza,
       itemSpecialtyText: StringNames.cheesyPizza,
       itemCategorization: ItemCategorization.pizza),
   PopularNowSectionModel(
@@ -33,12 +33,12 @@ List<PopularNowSectionModel> popularNowItem = [
       itemCategorization: ItemCategorization.burger),
   PopularNowSectionModel(
       imageAssetName: AssetNameString.pizzaImageAssetName,
-      itemNameText: StringNames.kMargheritaPizza,
+      itemNameText: StringNames.margheritaPizza,
       itemSpecialtyText: StringNames.cheesyPizza,
       itemCategorization: ItemCategorization.pizza),
   PopularNowSectionModel(
       imageAssetName: AssetNameString.pizzaImageAssetName,
-      itemNameText: StringNames.kMargheritaPizza,
+      itemNameText: StringNames.margheritaPizza,
       itemSpecialtyText: StringNames.cheesyPizza,
       itemCategorization: ItemCategorization.pizza),
   PopularNowSectionModel(

@@ -2,7 +2,8 @@ import 'package:snacks_ordering_app/string/assets_string.dart';
 
 class SizeModel {
   final String assertName;
-  SizeModel({required this.assertName});
+  bool isSelected;
+  SizeModel({required this.assertName, this.isSelected = false});
 }
 
 List<SizeModel> sizesList = [

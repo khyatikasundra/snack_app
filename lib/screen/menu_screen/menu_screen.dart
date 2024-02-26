@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:snacks_ordering_app/data_class/category_section_model.dart';
-import 'package:snacks_ordering_app/data_class/popular_now_section_model.dart';
+import 'package:snacks_ordering_app/screen/menu_screen/bloc/menu_screen_bloc.dart';
 import 'package:snacks_ordering_app/string/string_names.dart';
 import 'package:snacks_ordering_app/widgets/background_container.dart';
 import 'package:snacks_ordering_app/widgets/custom_category_card.dart';
@@ -17,13 +18,11 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  bool _switchValue = false;
-  int selectedIndex = -1;
-  late List<PopularNowSectionModel> selectedItem;
+  late MenuScreenBloc _menuScreenBloc;
 
   @override
   void initState() {
-    selectedItem = popularNowItem;
+    _menuScreenBloc = context.read<MenuScreenBloc>();
     super.initState();
   }
 
@@ -49,7 +48,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     ],
                   ),
                 ),
-                _switchValue ? _sliverListView() : _sliverGridView()
+                _gridOrListView()
               ],
             ),
           ),
@@ -57,8 +56,6 @@ class _MenuScreenState extends State<MenuScreen> {
       ),
     );
   }
-
-  //?List
 
 //?WIDGET METHODS
 
@@ -94,38 +91,27 @@ class _MenuScreenState extends State<MenuScreen> {
 
   Widget _categoriesListBuilder() => SizedBox(
         height: 160,
-        child: ListView.builder(
-            itemCount: categoryItem.length,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (BuildContext context, int index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: _customCategoryCard(index),
-              );
-            }),
+        child: BlocBuilder<MenuScreenBloc, MenuScreenState>(
+          builder: (context, state) {
+            return ListView.builder(
+                itemCount: categoryItem.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: _customCategoryCard(index),
+                  );
+                });
+          },
+        ),
       );
 
   Widget _customCategoryCard(int index) => CustomCategoryCard(
         index: index,
-        onCardClick: () {
-          setState(() {
-            selectedIndex = index;
-          });
-          selectedItem = popularNowItem
-              .where((element) =>
-                  categoryItem[index].itemCategorization ==
-                  element.itemCategorization)
-              .toList();
-        },
-        surfaceTint:
-            selectedIndex == index ? const Color(0xFfFECE00) : Colors.white,
-        iconBackgroundColor:
-            selectedIndex == index ? Colors.white : const Color(0xFfFECE00),
-        onIconClick: () {
-          setState(() {
-            selectedIndex = index;
-          });
-        },
+        onCardClick: () =>
+            _menuScreenBloc.add(CategoryCardSelectedEvent(index: index)),
+        onIconClick: () =>
+            _menuScreenBloc.add(CategoryCardSelectedEvent(index: index)),
       );
 
   Widget _popularNowTitleSection() => Row(
@@ -141,36 +127,48 @@ class _MenuScreenState extends State<MenuScreen> {
 
   Widget _customSwitch() => Padding(
         padding: const EdgeInsets.only(right: 15),
-        child: CupertinoSwitch(
-          activeColor: const Color(0xFfFECE00),
-          trackColor: Colors.grey,
-          value: _switchValue,
-          onChanged: (value) => _onChangeSwitchFunction(value),
+        child: BlocBuilder<MenuScreenBloc, MenuScreenState>(
+          builder: (context, state) {
+            return CupertinoSwitch(
+              activeColor: const Color(0xFfFECE00),
+              trackColor: Colors.grey,
+              value: state is OnSwitchSelectionGridOrListViewState
+                  ? state.value
+                  : false,
+              onChanged: _onSwitchSelectionGridORListView,
+            );
+          },
         ),
       );
 
-  void _onChangeSwitchFunction(bool value) {
-    _switchValue = value;
-    setState(() {});
+  void _onSwitchSelectionGridORListView(bool value) {
+    _menuScreenBloc.add(OnSwitchSelectionGridOrListViewEvent(value: value));
   }
 
-  SliverGrid _sliverGridView() => SliverGrid.builder(
-      itemCount: selectedItem.length,
+  Widget _gridOrListView() => BlocBuilder<MenuScreenBloc, MenuScreenState>(
+        builder: (context, state) =>
+            (state is OnSwitchSelectionGridOrListViewState && state.value)
+                ? _sliverListView()
+                : _sliverGridView(),
+      );
+
+  Widget _sliverGridView() => SliverGrid.builder(
+      itemCount: MenuScreenBloc.selectedItem.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           childAspectRatio:
               MediaQuery.of(context).size.width > 400 ? 1 / 0.5 : 1 / 1.3,
           crossAxisCount: 2),
       itemBuilder: (context, index) => CustomPopularNowCard(
             index: index,
-            list: selectedItem,
+            list: MenuScreenBloc.selectedItem,
           ));
 
-  SliverList _sliverListView() => SliverList.builder(
-        itemCount: selectedItem.length,
+  Widget _sliverListView() => SliverList.builder(
+        itemCount: MenuScreenBloc.selectedItem.length,
         itemBuilder: (context, index) => CustomPopularNowCard(
           index: index,
           isGridView: false,
-          list: selectedItem,
+          list: MenuScreenBloc.selectedItem,
         ),
       );
 }

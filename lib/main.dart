@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:snacks_ordering_app/screen/menu_screen.dart';
+import 'package:snacks_ordering_app/screen/menu_screen/menu_page.dart';
 import 'package:snacks_ordering_app/theme/app_theme.dart';
 
 void main() {
@@ -13,7 +13,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const MenuScreen(),
+      home: const MenuPage(),
       theme: AppTheme.getTheme(),
     );
   }

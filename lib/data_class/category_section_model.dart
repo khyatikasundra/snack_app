@@ -7,10 +7,12 @@ class CategorySectionModel {
   final String? imageAssetName;
   final String? itemNameText;
   final ItemCategorization itemCategorization;
+  bool isSelected;
   CategorySectionModel(
       {this.imageAssetName,
       this.itemNameText,
-      required this.itemCategorization});
+      required this.itemCategorization,
+      this.isSelected = false});
 }
 
 List<CategorySectionModel> categoryItem = [

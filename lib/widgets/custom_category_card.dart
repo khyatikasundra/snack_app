@@ -38,7 +38,9 @@ class CustomCategoryCard extends StatelessWidget {
   Widget _cardContainer(BuildContext context) => GestureDetector(
         onTap: onCardClick,
         child: Card(
-          color: surfaceTint,
+          color: categoryItem[index].isSelected
+              ? const Color(0xFfFECE00)
+              : Colors.white,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
           child: SizedBox(
@@ -58,7 +60,9 @@ class CustomCategoryCard extends StatelessWidget {
                   width: 45,
                   height: 45,
                   decoration: BoxDecoration(
-                    color: iconBackgroundColor,
+                    color: categoryItem[index].isSelected
+                        ? Colors.white
+                        : const Color(0xFfFECE00),
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
